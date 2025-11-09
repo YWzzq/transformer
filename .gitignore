@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+.cursorrules
+
+# Environment
+.env
+venv/
+env/
+ENV/
+
+# Logs
+*.log
+
+# 临时文件
+*.tmp
+*.bak
+*~
+.DS_Store
+

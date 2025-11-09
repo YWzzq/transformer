@@ -1,0 +1,72 @@
+Using device: cuda
+Loading vocabularies...
+Source vocabulary size: 7704
+Target vocabulary size: 9597
+Building model...
+Loading checkpoint from results/checkpoints/checkpoint_best.pth...
+Loaded model from epoch 26
+Validation loss: 3.5167
+
+============================================================
+Evaluating on Multi30K Test Set
+============================================================
+Translating 50 test samples...
+
+[1/50]
+EN: A man in an orange hat starring at something.
+DE (ref): Ein Mann mit einem orangefarbenen Hut, der etwas anstarrt.
+DE (pred): ein mann mit einem orangefarbenen hut starrt auf etwas.
+
+[2/50]
+EN: A Boston Terrier is running on lush green grass in front of a white fence.
+DE (ref): Ein Boston Terrier läuft über saftig-grünes Gras vor einem weißen Zaun.
+DE (pred): ein <unk> läuft auf einer grünen wiese vor einem weißen zaun.
+
+[3/50]
+EN: A girl in karate uniform breaking a stick with a front kick.
+DE (ref): Ein Mädchen in einem Karateanzug bricht ein Brett mit einem Tritt.
+DE (pred): ein mädchen in uniform ist mit einem stock vor einem <unk>
+
+[4/50]
+EN: Five people wearing winter jackets and helmets stand in the snow, with snowmobiles in the background.
+DE (ref): Fünf Leute in Winterjacken und mit Helmen stehen im Schnee mit Schneemobilen im Hintergrund.
+DE (pred): fünf personen in winterkleidung stehen im hintergrund stehen mit <unk> im hintergrund.
+
+[5/50]
+EN: People are fixing the roof of a house.
+DE (ref): Leute Reparieren das Dach eines Hauses.
+DE (pred): leute reparieren den dach eines hauses.
+
+[6/50]
+EN: A man in light colored clothing photographs a group of men wearing dark suits and hats standing around a woman dressed in a strapless gown.
+DE (ref): Ein hell gekleideter Mann fotografiert eine Gruppe von Männern in dunklen Anzügen und mit Hüten, die um eine Frau in einem trägerlosen Kleid herum stehen.
+DE (pred): ein mann in dunkler kleidung macht eine gruppe von männern mit dunklen hüten und einer frau in dunkler kleidung stehen um eine frau mit dunkler kleidung herum.
+
+[7/50]
+EN: A group of people standing in front of an igloo.
+DE (ref): Eine Gruppe von Menschen steht vor einem Iglu.
+DE (pred): eine gruppe von menschen steht vor einem <unk>
+
+[8/50]
+EN: A boy in a red uniform is attempting to avoid getting out at home plate, while the catcher in the blue uniform is attempting to catch him.
+DE (ref): Ein Junge in einem roten Trikot versucht, die Home Base zu erreichen, während der Catcher im blauen Trikot versucht, ihn zu fangen.
+DE (pred): ein junge in einem roten trikot versucht den ball zu fangen.
+
+[9/50]
+EN: A guy works on a building.
+DE (ref): Ein Typ arbeitet an einem Gebäude.
+DE (pred): ein mann arbeitet an einem gebäude.
+
+[10/50]
+EN: A man in a vest is sitting in a chair and holding magazines.
+DE (ref): Ein Mann in einer Weste sitzt auf einem Stuhl und hält Magazine.
+DE (pred): ein mann in einer weste sitzt auf einem stuhl und hält eine <unk>
+
+============================================================
+BLEU Scores
+============================================================
+BLEU Score: 4.27
+BLEU-1: 37.04
+BLEU-2: 12.61
+BLEU-3: 3.65
+BLEU-4: 0.21
