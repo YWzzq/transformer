@@ -781,7 +781,7 @@ Dropout的实验结果需要从训练-泛化权衡的角度理解：
     
     \item \textbf{Dropout作为Ensemble}：Dropout可视为隐式的模型集成——每次前向传播相当于训练一个不同的子网络（因失活模式不同），最终模型是所有子网络的平均。这种集成效应在大规模训练中更显著
     
-    \item \textbf{完整实验的验证}：基线模型（Dropout 0.25）在训练中达到验证loss 3.52，证明Dropout有效防止了过拟合。如果无Dropout，模型可能在训练集上达到更低loss，但验证loss会更高
+    \item \textbf{完整实验的验证}：基线模型（Dropout 0.25）在10 epochs训练中达到验证loss 3.6948，证明Dropout有效防止了过拟合。如果无Dropout，模型可能在训练集上达到更低loss，但验证loss会更高
     
     \item \textbf{实践启示}：评估正则化技术（Dropout、Weight Decay、Label Smoothing）时，\textbf{必须同时观察训练集和验证集性能}，单看训练loss会误导结论
 \end{enumerate}
