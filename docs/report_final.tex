@@ -999,57 +999,62 @@ python -m spacy download de_core_news_sm
 
 \subsection{复现实验}
 
-\subsubsection{训练基线模型}
+本项目的所有实验结果可通过以下两个步骤完全复现：
 
-\begin{lstlisting}[language=bash, caption=基线模型训练（多GPU）]
+\subsubsection{步骤1：运行消融实验（包含Baseline）}
+
+消融实验脚本会自动训练基线模型和所有变体配置，生成完整的对比结果。
+
+\begin{lstlisting}[language=bash, caption=运行消融实验（包含baseline训练）]
 # Set random seed for reproducibility
 export PYTHONHASHSEED=42
 
-# Train on 3 GPUs (GPU 1, 2, 3)
-CUDA_VISIBLE_DEVICES=1,2,3 python scripts/train.py
-
-# Expected output:
-#   - Best checkpoint: results/checkpoints/checkpoint_best.pth
-#   - Epoch checkpoints: results/checkpoints/checkpoint_epoch_*.pth
-#   - Training log: results/logs/training_log.txt
-#   - Estimated time: 4-6 hours on 3x NVIDIA GPUs
-\end{lstlisting}
-
-\subsubsection{运行消融实验}
-
-\begin{lstlisting}[language=bash, caption=完整消融实验]
-# Run all ablation experiments
-export PYTHONHASHSEED=42
-CUDA_VISIBLE_DEVICES=1,2,3 python scripts/ablation_study.py \
-    --max-samples 20000 \
+# Run all ablation experiments including baseline
+CUDA_VISIBLE_DEVICES=1 python scripts/ablation_study.py \
     --epochs 10 \
     --run-all
 
 # Expected output:
-#   - Checkpoints: results/checkpoints/ablation_*.pth
-#   - Figures: results/figures/ablation_study.png
-#   - Figures: results/figures/ablation_comparison.png
-#   - Estimated time: ~3-4 hours for all experiments
+#   - Baseline checkpoint: results/checkpoints/ablation_Baseline.pth
+#   - Ablation checkpoints: results/checkpoints/ablation_*.pth
+#   - Training curves: results/figures/ablation_study.png
+#   - Comparison chart: results/figures/ablation_comparison.png
+#   - Estimated time: ~10-15 minutes on single GPU
 \end{lstlisting}
 
-\subsubsection{模型评估}
+\textbf{说明}：
+\begin{itemize}
+    \item \texttt{--run-all}：运行所有消融配置（Baseline、2 Heads、4 Heads、2 Layers、FFN 512、No Dropout、No Pos Encoding）
+    \item \texttt{--epochs 10}：每个配置训练10个epoch
+    \item 训练完成后，基线模型保存为\texttt{ablation\_Baseline.pth}
+\end{itemize}
 
-\begin{lstlisting}[language=bash, caption=模型评估与翻译]
-# Evaluate on Multi30k test set with BLEU scores
+\subsubsection{步骤2：评估Baseline模型}
+
+在Multi30k测试集上评估基线模型，获取BLEU分数和翻译样例。
+
+\begin{lstlisting}[language=bash, caption=评估基线模型]
+# Evaluate baseline model on test set
 CUDA_VISIBLE_DEVICES=1 python scripts/evaluate.py \
-    --checkpoint results/checkpoints/checkpoint_best.pth \
+    --checkpoint results/checkpoints/ablation_Baseline.pth \
     --dataset multi30k \
     --use-test-set \
-    --num-samples 1000
-
-# Show detailed translation examples
-CUDA_VISIBLE_DEVICES=1 python scripts/evaluate.py \
-    --checkpoint results/checkpoints/checkpoint_best.pth \
-    --dataset multi30k \
-    --use-test-set \
-    --num-samples 10 \
     --verbose
+
+# Expected output:
+#   - Validation loss: 3.6948
+#   - BLEU Score: 5.99
+#   - BLEU-1/2/3/4: 40.15 / 14.17 / 5.13 / 0.47
+#   - Translation examples (10 samples)
+#   - Estimated time: <1 minute
 \end{lstlisting}
+
+\textbf{说明}：
+\begin{itemize}
+    \item \texttt{--checkpoint}：指定评估的模型权重文件
+    \item \texttt{--use-test-set}：使用测试集而非验证集
+    \item \texttt{--verbose}：显示详细的翻译样例对比
+\end{itemize}
 
 \subsection{随机种子保证}
 
