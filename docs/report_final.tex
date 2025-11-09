@@ -125,7 +125,7 @@ bottom=25mm
 \vskip 1em
 
 \songti\zihao{-4}
-本报告详细介绍了从零实现Transformer模型用于机器翻译任务的完整过程。Transformer是一种基于自注意力机制的深度学习架构，在自然语言处理领域取得了突破性成果。本项目完全基于PyTorch基础模块手工实现了包含Encoder和Decoder的完整Transformer模型，不使用任何预训练的Transformer库。我们在Multi30k英德翻译数据集上进行训练和评估，并通过消融实验分析了注意力头数、模型深度、前馈网络维度、Dropout和位置编码等关键组件对模型性能的影响。实验结果表明，我们的实现能够成功训练并在翻译任务上取得BLEU分数4.27的性能，模型最低验证损失达到3.52。消融实验揭示了各组件的重要性，验证了对Transformer架构及其关键组件的深入理解。
+本报告详细介绍了从零实现Transformer模型用于机器翻译任务的完整过程。Transformer是一种基于自注意力机制的深度学习架构，在自然语言处理领域取得了突破性成果。本项目完全基于PyTorch基础模块手工实现了包含Encoder和Decoder的完整Transformer模型，不使用任何预训练的Transformer库。我们在Multi30k英德翻译数据集上进行训练和评估，并通过消融实验分析了注意力头数、模型深度、前馈网络维度、Dropout和位置编码等关键组件对模型性能的影响。实验结果表明，我们的实现能够成功训练并在翻译任务上取得BLEU分数5.99的性能，基线模型（训练10个epoch）验证损失为3.6948。消融实验揭示了各组件的重要性，验证了对Transformer架构及其关键组件的深入理解。
 
 \vskip 1em
 
@@ -636,11 +636,11 @@ Label Smoothing & 0.1 \\
 
 \subsection{基线模型训练}
 
-基线模型采用表2中的超参数配置进行训练。训练过程如下：
+基线模型采用表2中的超参数配置进行训练（10个epoch）。训练过程如下：
 
 \begin{itemize}
-    \item 训练集最终loss：3.30，训练集perplexity：27.1
-    \item 验证集最佳loss：3.52，验证集perplexity：33.8
+    \item 训练集最终loss：3.72，训练集perplexity：41.4
+    \item 验证集最佳loss：3.6948，验证集perplexity：40.2
     \item 训练10个epoch，模型收敛稳定
     \item Noam学习率调度器在warmup后有效，模型训练稳定
 \end{itemize}
@@ -654,20 +654,20 @@ Label Smoothing & 0.1 \\
 \toprule
 \textbf{指标} & \textbf{分数} \\
 \midrule
-BLEU Score & 4.27 \\
-BLEU-1 & 37.04 \\
-BLEU-2 & 12.61 \\
-BLEU-3 & 3.65 \\
-BLEU-4 & 0.21 \\
+BLEU Score & 5.99 \\
+BLEU-1 & 40.15 \\
+BLEU-2 & 14.17 \\
+BLEU-3 & 5.13 \\
+BLEU-4 & 0.47 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 \textbf{结果分析}：
 \begin{itemize}
-    \item BLEU-1分数37.04表明模型能正确预测约37\%的单词
+    \item BLEU-1分数40.15表明模型能正确预测约40\%的单词
     \item 随着n-gram长度增加，BLEU分数快速下降，说明模型在长距离依赖和语法结构上仍有提升空间
-    \item 总体BLEU 4.27对于从零实现且在小数据集（29K训练样本）上训练的模型而言是合理的结果
+    \item 总体BLEU 5.99对于从零实现且在小数据集（29K训练样本）上训练的模型而言是合理的结果
     \item 模型成功学习到基本的翻译能力，验证了实现的正确性
 \end{itemize}
 
@@ -845,23 +845,23 @@ Dropout的实验结果需要从训练-泛化权衡的角度理解：
 \toprule
 \textbf{[1] EN:} A man in an orange hat starring at something. \\
 \textbf{DE (ref):} Ein Mann mit einem orangefarbenen Hut, der etwas anstarrt. \\
-\textbf{DE (pred):} ein mann mit einem orangefarbenen hut starrt auf etwas. \\
+\textbf{DE (pred):} ein mann mit orangefarbenem hut starrt auf etwas. \\
 \midrule
 \textbf{[2] EN:} A Boston Terrier is running on lush green grass in front of a white fence. \\
 \textbf{DE (ref):} Ein Boston Terrier läuft über saftig-grünes Gras vor einem weißen Zaun. \\
-\textbf{DE (pred):} ein \texttt{<unk>} läuft auf einer grünen wiese vor einem weißen zaun. \\
+\textbf{DE (pred):} ein \texttt{<unk>} läuft auf einem grünen platz vor einem weißen zaun im weißen zaun. \\
 \midrule
 \textbf{[3] EN:} People are fixing the roof of a house. \\
 \textbf{DE (ref):} Leute Reparieren das Dach eines Hauses. \\
-\textbf{DE (pred):} leute reparieren den dach eines hauses. \\
+\textbf{DE (pred):} leute warten auf dem dach eines gebäudes. \\
 \midrule
 \textbf{[4] EN:} A guy works on a building. \\
 \textbf{DE (ref):} Ein Typ arbeitet an einem Gebäude. \\
-\textbf{DE (pred):} ein mann arbeitet an einem gebäude. \\
+\textbf{DE (pred):} ein mann arbeitet an einem gebäude vor einem gebäude. \\
 \midrule
 \textbf{[5] EN:} A man in a vest is sitting in a chair and holding magazines. \\
 \textbf{DE (ref):} Ein Mann in einer Weste sitzt auf einem Stuhl und hält Magazine. \\
-\textbf{DE (pred):} ein mann in einer weste sitzt auf einem stuhl und hält eine \texttt{<unk>}. \\
+\textbf{DE (pred):} ein mann in einer weste sitzt auf einem stuhl und hält eine zigarette. \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -870,20 +870,21 @@ Dropout的实验结果需要从训练-泛化权衡的角度理解：
 
 \textbf{优点}：
 \begin{itemize}
-    \item \textbf{语义正确}：样例[1][3][4]的翻译语义基本准确，关键词都被正确翻译
+    \item \textbf{语义正确}：样例[1][4]的翻译语义基本准确，关键词都被正确翻译
     \item \textbf{语法结构}：德语的基本语法结构（如动词位置）大多正确，如"ein mann arbeitet"
-    \item \textbf{词汇选择}：常见词汇翻译准确，如"orange hat"→"orangefarbenen hut"
+    \item \textbf{词汇选择}：常见词汇翻译准确，如"orange hat"→"orangefarbenem hut"
 \end{itemize}
 
 \textbf{不足}：
 \begin{itemize}
-    \item \textbf{未登录词}：样例[2][5]出现\texttt{<unk>}，说明词表覆盖不足（如"Boston Terrier"、"magazines"等专有名词或低频词）
-    \item \textbf{细微语法错误}：样例[3]"den dach"应为"das Dach"（冠词性别错误）
-    \item \textbf{词汇替换}：样例[4]将"guy"翻译为"mann"而非"typ"，虽然语义正确但不够精确
-    \item \textbf{长句表现}：对于长句（样例[2]），模型容易丢失细节信息
+    \item \textbf{未登录词}：样例[2]出现\texttt{<unk>}，说明词表覆盖不足（如"Boston Terrier"等专有名词或低频词）
+    \item \textbf{语义偏差}：样例[3]将"fixing"翻译为"warten"（等待）而非"reparieren"（修理），语义错误
+    \item \textbf{冗余重复}：样例[2][4]出现重复词汇（"weißen zaun im weißen zaun"、"gebäude vor einem gebäude"）
+    \item \textbf{词汇替换错误}：样例[5]将"magazines"翻译为"zigarette"（香烟），完全错误
+    \item \textbf{长句表现}：对于长句（样例[2]），模型容易丢失细节信息或产生冗余
 \end{itemize}
 
-\textbf{总结}：模型在简单句子上表现良好，能够捕捉基本的语义和语法结构。主要问题是词表覆盖不足和长句处理能力有限，这可以通过使用BPE/SentencePiece分词和更多训练数据来改善。
+\textbf{总结}：模型在简单句子上表现良好，能够捕捉基本的语义和语法结构。主要问题是词表覆盖不足、语义理解偏差和长句处理能力有限，这可以通过使用BPE/SentencePiece分词、更多训练数据和更长训练周期来改善。
 
 \subsection{实验总结与理论洞察}
 
@@ -1080,12 +1081,12 @@ def set_seed(seed=42):
 \toprule
 \textbf{指标} & \textbf{值} \\
 \midrule
-最终训练Loss & 3.30 $\pm$ 0.10 \\
-最佳验证Loss & 3.52 $\pm$ 0.10 \\
-训练Perplexity & 27.1 $\pm$ 2.0 \\
-验证Perplexity & 33.8 $\pm$ 3.0 \\
-BLEU Score (Multi30k test) & 4.27 $\pm$ 0.20 \\
-BLEU-1 & 37.04 $\pm$ 1.0 \\
+最终训练Loss & 3.72 $\pm$ 0.10 \\
+最佳验证Loss & 3.6948 $\pm$ 0.10 \\
+训练Perplexity & 41.4 $\pm$ 3.0 \\
+验证Perplexity & 40.2 $\pm$ 3.0 \\
+BLEU Score (Multi30k test) & 5.99 $\pm$ 0.20 \\
+BLEU-1 & 40.15 $\pm$ 1.0 \\
 训练时间（GPU） & 约1分钟 \\
 模型参数量 & 26.9M \\
 训练Epoch数 & 10 \\
@@ -1105,7 +1106,7 @@ BLEU-1 & 37.04 $\pm$ 1.0 \\
     
     \item \textbf{详细数学推导}：对每个模块进行了严格的数学推导，解释了设计动机和实现细节，报告包含完整的公式和符号说明
     
-    \item \textbf{成功训练验证}：在Multi30k英德翻译数据集上成功训练模型，验证集loss收敛至3.52，测试集BLEU分数达到4.27，证明实现的正确性
+    \item \textbf{成功训练验证}：在Multi30k英德翻译数据集上成功训练模型，基线模型验证集loss收敛至3.6948，测试集BLEU分数达到5.99，证明实现的正确性
     
     \item \textbf{系统消融实验}：进行了7组消融实验，获得了有价值的实验洞察，包括位置编码是性能影响最大的组件、多头注意力的重要性、模型深度与数据规模匹配等
     
@@ -1147,9 +1148,9 @@ BLEU-1 & 37.04 $\pm$ 1.0 \\
 \begin{enumerate}
     \item \textbf{理论到实践的完整闭环}：从数学推导（Scaled Attention的方差分析、Multi-Head的子空间分解）到代码实现（26.9M参数，2000+行PyTorch代码），形成了严格的理论-实践对应
     
-    \item \textbf{实验验证与洞察发现}：通过7组消融实验，不仅验证了实现正确性（BLEU 4.27），更揭示了组件重要性排序、参数效率规律、训练稳定性机制等深层规律
+    \item \textbf{实验验证与洞察发现}：通过7组消融实验，不仅验证了实现正确性（BLEU 5.99），更揭示了组件重要性排序、参数效率规律、训练稳定性机制等深层规律
     
-    \item \textbf{可复现性保证}：固定随机种子（42）、详细超参数表、精确命令行，任何研究者都能复现本项目的实验结果（验证loss 3.52 ± 0.10）
+    \item \textbf{可复现性保证}：固定随机种子（42）、详细超参数表、精确命令行，任何研究者都能复现本项目的实验结果（验证loss 3.6948 ± 0.10）
     
     \item \textbf{学术级文档}：本报告包含完整的数学推导、架构分析、实验设计和理论洞察，达到学术论文标准
 \end{enumerate}

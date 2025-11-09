@@ -4,7 +4,7 @@
 
 ## 项目特点
 
-- 完全从零实现，不使用`torch.nn.TransformerEncoderLayer`等预制模块
+- 完全从零实现，不使用`torch.nn.TransformerEncoderLayer`等模块
 - 实现完整的Encoder-Decoder架构
 - 包含系统的消融实验，分析各组件对性能的影响
 - 详细的数学推导和代码注释
@@ -49,7 +49,7 @@
 ### 激活环境
 
 ```bash
-conda activate transform  # 使用已有环境
+conda activate transform  
 ```
 
 ### 安装依赖
@@ -72,9 +72,9 @@ scikit-learn==1.3.0
 
 ### 硬件要求
 
-- 推荐：NVIDIA GPU (CUDA 11.7+)，内存 16GB+
+- 推荐：NVIDIA GPU (CUDA 11.7+)，内存 8GB+
 - 最低：CPU，内存 8GB+
-- 训练时间：1h
+- 训练时间：30min
 
 ## 数据集
 
@@ -90,24 +90,12 @@ scikit-learn==1.3.0
 
 ## 快速开始
 
-### 训练基线模型
 
-```bash
-# 设置随机种子
-export PYTHONHASHSEED=42
-
-# 完整训练
-python scripts/train.py
-
-# 快速测试（仅1000样本）
-python scripts/train.py --max-samples 1000
-```
-
-### 运行消融实验
+### 运行消融实验（包含baseline）
 
 ```bash
 export PYTHONHASHSEED=42
-python scripts/ablation_study.py --max-samples 20000 --epochs 10 --run-all
+python scripts/ablation_study.py  --epochs 10 --run-all
 ```
 
 消融实验包括：
@@ -123,7 +111,7 @@ python scripts/ablation_study.py --max-samples 20000 --epochs 10 --run-all
 
 ```bash
 # 在测试集上评估
-CUDA_VISIBLE_DEVICES=1 python scripts/evaluate.py     --checkpoint results/checkpoints/ablation_Baseline.pth     --dataset multi30k     --use-test-set     --num-samples 1000     --verbose
+CUDA_VISIBLE_DEVICES=1 python scripts/evaluate.py     --checkpoint results/checkpoints/ablation_Baseline.pth     --dataset multi30k     --use-test-set        --verbose
 ```
 
 ## 模型架构
@@ -172,13 +160,15 @@ CUDA_VISIBLE_DEVICES=1 python scripts/evaluate.py     --checkpoint results/check
 
 ### 基线模型
 
-- 验证集最佳loss：3.52
-- 最佳epoch：26
-- BLEU Score：4.27
-- BLEU-1：37.04
-- BLEU-2：12.61
-- BLEU-3：3.65
-- BLEU-4：0.21
+- **训练配置**：Baseline（8头，4层，训练 10 epochs）
+- **模型权重**：`results/checkpoints/ablation_Baseline.pth`
+- **验证集 Loss**：3.6948（epoch 10）
+- **测试集评估结果**：
+  - BLEU Score：5.99
+  - BLEU-1：40.15
+  - BLEU-2：14.17
+  - BLEU-3：5.13
+  - BLEU-4：0.47
 
 ### 消融实验结果
 
@@ -237,13 +227,16 @@ torch.backends.cudnn.deterministic = True
 export PYTHONHASHSEED=42
 
 
-#baseline训练+消融实验
+#消融实验
  CUDA_VISIBLE_DEVICES=1 python scripts/ablation_study.py --run-all --epochs 10
+
+# 评估基线模型
+ CUDA_VISIBLE_DEVICES=1 python scripts/evaluate.py     --checkpoint results/checkpoints/ablation_Baseline.pth     --dataset multi30k     --use-test-set        --verbose
 ```
 
 ## 学术报告
 
-完整的LaTeX学术报告位于`docs/report_final.tex`，包含：
+完整的LaTeX位于`docs/report_final.tex`，包含：
 
 1. 引言：Transformer背景与动机
 2. 相关工作：序列模型演进
@@ -253,13 +246,6 @@ export PYTHONHASHSEED=42
 6. 结果与分析：训练曲线、消融实验
 7. 可复现性说明：环境配置、运行命令
 8. 结论与未来工作
-
-编译报告：
-
-```bash
-cd docs/
-xelatex report_final.tex
-```
 
 
 
